@@ -1,10 +1,10 @@
-# 🏪 Sistema de Pedidos de Ropa al Por Mayor
+# Sistema de Pedidos de Ropa al Por Mayor
 
 ## Proyecto Final - Programación I
 
 ### Integrantes
-- **[Tu Nombre]** - POO, Estructuras de Datos, Manejo de Archivos
-- **[Nombre de tu Compañero]** - Algoritmos, Base de Datos, UI
+- **[Emerson]** - POO, Estructuras de Datos, Manejo de Archivos
+- **[Huber]** - Algoritmos, Base de Datos, UI
 
 ### Requisitos Cumplidos
 #__________________________________________________________
