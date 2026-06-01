@@ -27,26 +27,19 @@ class Utilidades:
     """Biblioteca de funciones útiles - BIBLIOTECA PROPIA"""
     
     @staticmethod
-    def validar_entero(valor: str) -> int:
+    def validar_tipo(valor: str,tipo,msg:str)
         """Convierte a entero, lanza excepción si no es válido"""
         try:
-            num = int(valor)
-            if num <= 0:
-                raise ValueError("Debe ser positivo")
+            num = tipo(valor)
+            if num <= 0:raise ValueError("Debe ser positivo")
             return num
-        except ValueError:
-            raise ValueError(f"'{valor}' no es un número entero válido")
+        except ValueError:raise ValueError(msg)
     
     @staticmethod
-    def validar_flotante(valor: str) -> float:
-        """Convierte a float, lanza excepción si no es válido"""
-        try:
-            num = float(valor)
-            if num <= 0:
-                raise ValueError("Debe ser positivo")
-            return num
-        except ValueError:
-            raise ValueError(f"'{valor}' no es un número válido")
+    def validar_texto(valor: str) -> str:
+        """Convierte a str, valor numerico para validar que sea positivo"""
+            if not valor or not valor.strip():raise valueError("el texto no puede estar vacio"
+            return valor.strip()
     
     @staticmethod
     def validar_texto(valor: str) -> str:
@@ -56,14 +49,7 @@ class Utilidades:
         return valor.strip()
     
     @staticmethod
-    def formatear_moneda(valor: float) -> str:
-        """Formatea como moneda"""
-        return f"${valor:,.2f}"
-    
-    @staticmethod
-    def generar_id() -> int:
-        """Genera ID único basado en timestamp"""
-        return int(datetime.now().timestamp() * 1000)
+    def formatear_moneda(valor: float) -> str: return f"Q(valor:,.2f)"
 
 
 # ==================== CLASES POO (4 PILARES) ====================
@@ -72,24 +58,22 @@ class Utilidades:
 class Prenda:
     """Clase abstracta que representa una prenda de ropa"""
     
-    def __init__(self, marca: str, cantidad: int, precio: float, tipo: str):
-        # ENCAPSULAMIENTO - Atributos privados
-        self._marca = marca
-        self._cantidad = cantidad
-        self._precio = precio
-        self._tipo = tipo
-    
+    def __init__(self, marca: str, cantidad: int, precio: float, tipo: str):  
+        self._marca, self._cantidad, self._precio, self._tipo=marca, cantidad, precio,tipo
     # Getters y Setters (ENCAPSULAMIENTO)
+    @property
     def get_marca(self): return self._marca
+    @property    
     def get_cantidad(self): return self._cantidad
+    @property    
     def get_precio(self): return self._precio
+    @property    
     def get_tipo(self): return self._tipo
+        
+    @cantidad.setter
+    def cantidad(self, V): self._cantidad =v if v > 0 else self._cantidad
     
-    def set_cantidad(self, cantidad): 
-        if cantidad > 0: self._cantidad = cantidad
-    
-    def set_precio(self, precio): 
-        if precio > 0: self._precio = precio
+    def precio(self, v): self._precio=v if v > 0 else self._precio
     
     # Método a ser sobrescrito (POLIMORFISMO)
     def calcular_total(self) -> float:
