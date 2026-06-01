@@ -28,19 +28,15 @@ class Utilidades:
     
     @staticmethod
     def validar_tipo(valor: str,tipo,msg:str)
-        """Convierte a entero, lanza excepción si no es válido"""
+        """Convierte a tipo numerico, lanza excepción si no es válido o es <= 0"""
         try:
             num = tipo(valor)
-            if num <= 0:raise ValueError("Debe ser positivo")
+            if num <= 0:
+                raise ValueError("Debe ser positivo")
             return num
-        except ValueError:raise ValueError(msg)
-    
-    @staticmethod
-    def validar_texto(valor: str) -> str:
-        """Convierte a str, valor numerico para validar que sea positivo"""
-            if not valor or not valor.strip():raise valueError("el texto no puede estar vacio"
-            return valor.strip()
-    
+        except ValueError:
+            raise ValueError(msg)
+
     @staticmethod
     def validar_texto(valor: str) -> str:
         """Valida que el texto no esté vacío"""
@@ -49,7 +45,8 @@ class Utilidades:
         return valor.strip()
     
     @staticmethod
-    def formatear_moneda(valor: float) -> str: return f"Q(valor:,.2f)"
+    def formatear_moneda(valor: float) -> str: 
+        return f"Q(valor:,.2f)"
 
 
 # ==================== CLASES POO (4 PILARES) ====================
@@ -59,26 +56,34 @@ class Prenda:
     """Clase abstracta que representa una prenda de ropa"""
     
     def __init__(self, marca: str, cantidad: int, precio: float, tipo: str):  
-        self._marca, self._cantidad, self._precio, self._tipo=marca, cantidad, precio,tipo
+        self._marca = marca
+        self._cantidad = cantidad 
+        self._precio = precio = precio
+        self._tipo = tipo
     # Getters y Setters (ENCAPSULAMIENTO)
     @property
-    def get_marca(self): return self._marca
+    def marca(self) -> str: return self._marca
     @property    
-    def get_cantidad(self): return self._cantidad
+    def cantidad(self) -> init: return self._cantidad
     @property    
-    def get_precio(self): return self._precio
+    def precio(self) -> float: return self._precio
     @property    
-    def get_tipo(self): return self._tipo
+    def tipo(self) -> str: return self._tipo
         
+    @setter.
     @cantidad.setter
-    def cantidad(self, V): self._cantidad =v if v > 0 else self._cantidad
+    def cantidad(self, v: int):
     
-    def precio(self, v): self._precio=v if v > 0 else self._precio
+    @precio.setter
+    def precip(self, v:float)
+      if v > 0: self._precio = v
     
     # Método a ser sobrescrito (POLIMORFISMO)
-    def calcular_total(self) -> float: return self._cantidad * self._precio
+    def calcular_total(self) -> float: 
+        return self._cantidad * self._precio
     
-    def __str__(self): return f"{self._tipo} {self._marca} | {self._cantidad} uds | Q{self._precio}/ud"
+    def __str__(self):
+        return f"{self._tipo} {self._marca} | {self._cantidad} uds | Q{self._precio}/ud"
 
 # HERENCIA - Clase que hereda de Prenda
 class PrendaMayorista(Prenda):
@@ -92,7 +97,9 @@ class PrendaMayorista(Prenda):
 # Clase Usuario (ENCAPSULAMIENTO)
 class Usuario:
     def __init__(self, nombre: str, rol: str):
-        self._nombre, self._rol = nombre, rol  # 'admin' o 'empleado'
+        self._nombre = nombre
+        self._rol = #'admin' o 'empleado'
+        
     @property
     def nombre(self): return self._nombre
     @property    
@@ -104,26 +111,32 @@ class Usuario:
 # LISTA ENLAZADA (Unidad 5)
 class Nodo:
     def __init__(self, dato):
-        self.dato, self.siguiente = dato, None
+        self.dato = dato
+        self.siguiente = None
 
 class ListaEnlazada:
     """Implementación de lista enlazada simple"""
     
     def __init__(self):
-        self._cabeza, self._tamaño = None, 0
-    
+        self._cabeza = None
+        self._tamaño = 0
+
     def agregar(self, dato):
         nuevo = Nodo(dato)
-        if not self._cabeza: self._cabeza = nuevo
+        if not self._cabeza: 
+            self._cabeza = nuevo
         else:
             act = self._cabeza
-            while act.siguiente: act = act.siguiente
+            while act.siguiente: 
+                act = act.siguiente
             act.siguiente = nuevo
         self._tamaño += 1
     
     def obtener_todos(self):
          res,act = [], self._cabeza
-        while act: res.append(act.dato);act = act.siguiente
+        while act:
+            res.append(act.dato)
+            act = act.siguiente
         return res
         
 
@@ -131,35 +144,46 @@ class ListaEnlazada:
 class Pila:
     """Implementación de Pila (LIFO) para deshacer acciones"""
     
-    def __init__(self): self._items []    
-    def push(self, item): self._items.append(item)   
-    def pop(self): return self._items.pop() if self._items else None
+    def __init__(self): 
+        self._items []    
+    def push(self, item):
+        self._items.append(item)   
+    def pop(self): 
+        return self._items.pop() if self._items else None
 
 # COLA (Queue) - Unidad 6
 class Cola:
     """Implementación de Cola (FIFO) para pedidos pendientes"""
     
-    def __init__(self): self._items = []  
-    def encolar(self, item):self._items.append(item)   
-    def desencolar(self): return self._items.pop(0) if self._items else None
+    def __init__(self):
+        self._items = []  
+    def encolar(self, item):
+        self._items.append(item)   
+    def desencolar(self): 
+        return self_items.pop(0)if self._items else None
 
 
 # ==================== ALGORITMOS ====================
 
 def ordenar_por_precio(lista: List[Prenda] -> list[prenda]:
-    if len(lista) <= 1: return lista
+    if len(lista) <= 1:
+        return lista
     pivote = lista[0].calcular_total()
     menores = [p for p in lista[1:] if p.calcular_total() <= pivote]
     mayores = [p for p in lista[1:] if p.calcular_total() > pivote]
     return ordenar_por_precio(menores) + [lista[0]] + ordenar_por_precio(mayores)
 
 def calcular_total_recursivo(pedidos: List[Prenda], idx: int = 0) -> float:
-    return 0 if idx >= len(pedidos) else pedidos[idx].calcular_total() +
-calcular_total_recursivo(pedidos, idx + 1)
+     if idx >= len(pedidos) 
+    return 0.0
+    return pedidos[idx].calcular_total() + calcular_total_recursivo(pedidos, idx + 1)
 
 def buscar_recursivo(pedidos: list[prenda], idx: int, marca: str) -> int:
-    if idx >= len(pedidos): return -1
-    return idx if pedidos[idx].marca.lower() == marca.lower() else buscar_recursivo(pedidos, idx + 1, marca)
+    if idx >= len(pedidos):
+        return -1
+    if pedidos[idx].marca.lower() == marca.lower() 
+       return idx 
+return buscar_recursivo(pedidos, idx + 1, marca)
 
 
 # ==================== BASE DE DATOS (CRUD) ====================
@@ -172,38 +196,43 @@ class BaseDatos:
             self.conn = sqlite3.connect('tienda_ropa.db')
             self.cursor = self.conn.cursor()
             self.cursor.execute("CREATE TABLE IF NOT EXISTS usuarios (id INTEGER PRIMARY KEY, nombre TEXT UNIQUE, password TEXT, rol TEXT)´)
-            self.cursor.execute("CREATE TABLE IF NOT EXISTS pedidos (id INTEGER PRIMARY KEY, marca TEXT,cantidad INTEGER,precio REAL,tipo TEXT,total REA,fecha TEXT)´)
+            self.cursor.execute("CREATE TABLE IF NOT EXISTS pedidos (id INTEGER PRIMARY KEY, marca TEXT,cantidad INTEGER,precio REAL,tipo TEXT,total REAL,fecha TEXT)´)
         
         # Insertar usuarios por defecto
-        # self.cursor.executemany("INSERT OR IGNORE INTO usuarios (nombre, password, rol) VALUES (?,?,?)",[('admin', 'admin123', 'admin'),('empleado', 'emp456', 'empleado' 
+        self.cursor.execute("INSERT OR IGNORE INTO usuarios (nombre, password, rol) VALUES ('admin', 'admin123', 'admin')")
         self.cursor.execute("INSERT OR IGNORE INTO usuarios (nombre, password, rol) VALUES ('empleado', 'emp456', 'empleado')")]
         self.conn.commit()
         return True
-        except Exception as e: return print(f"error BD: {e}") or False
+        except Exception as e:
+            print(f"error BD: {e}")
+        return False
                                 
     # CREATE
     def insertar_pedido(self, p: Prenda)
         try:
             self.cursor.execute("INSERT INTO pedidos (marca, cantidad, precio, tipo, total, fecha) VALUES (?, ?, ?, ?, ?, ?)',
-                (p.marca, p.cantidad, p.precio, p.tipo, p.calcular_total(),
-    datetime.now().isoformat()))
+                (p.marca, p.cantidad, p.precio, p.tipo, p.calcular_total(), datetime.now().isoformat()))
             self.conn.commit()
-            except exception as e: print(f"Error insertado: {e}")
+            except exception as e:
+                print(f"Error insertado: {e}")
     
     # READ
     def obtener_pedidos(self)
         try:
             self.cursor.execute("SELECT * FROM pedidos ORDER BY fecha DESC")
             return [{"id": r[0], "marca": r[1], "cantidad": r[2], "precio": r[3], "tipo": r[4], "total": r[5], "fecha": r[6]} for r in self.cursor.fetchall()]
-        except Exception as e: return print(f"Error obteniendo: {e}") or []
+        except Exception as e:
+            print(f"Error obteniendo: {e}") 
+            return []
     
     # UPDATE
-    def actualizar_pedido(self, id_p: int, m: str, c: int, pr: float, t: str):
+    def actualizar_pedido(self, id_p: int, m: str, c: int, pr: float, t: str, total: float):
         try
-            self.cursor.execute(UPDATE pedidos SET marca=?, cantidad=?, precio=?, tipo=?, total=? WHERE id=?', (m, c, pr, t, c*pr, id_p))
+            self.cursor.execute(UPDATE pedidos SET marca=?, cantidad=?, precio=?, tipo=?, total=? WHERE id=?', (m, c, pr, t, total, id_p))
             self.conn.commit()
             return True
-        except Exception as e: return print(f"Error actualizando: {e}") or False
+        except Exception as e:
+            print(f"Error actualizando: {e}")
             return False
     
     # DELETE
@@ -212,7 +241,9 @@ class BaseDatos:
             self.cursor.execute("DELETE FROM pedidos WHERE id=?", (id_p,))
             self.conn.commit()
             return True
-        except Exception as e: return print(f"Error eliminando: {e}") or False
+        except Exception as e:
+            print(f"Error eliminando: {e}") 
+            return False
     
     def autenticar(self, n: str, p: str):
             self.cursor.execute("SELECT nombre, rol FROM usuarios WHERE nombre=? AND password=?", (n, p))
@@ -220,29 +251,34 @@ class BaseDatos:
                 return Usuario(res[0], res[1]) ir res else None
     
     def cerrar(self):
-        if hasattr(self.'conn') and self.conn: self.conn.close()
+        if hasattr(self.'conn') and 
+                   self.conn: self.conn.close()
 
 
 # ==================== MANEJO DE ARCHIVOS ====================
 
 def guardar_backup(pedidos: List[Prenda], archivo= "backup_pedidos.json"):
     """Guarda los pedidos en un archivo JSON"""
-        datos = [{"marca": p,marca, "cantidad": p.cantidad, "precio": p.precio, "tipo": p.tipo, "total": p.calcular_total(), "fecha": datetime.now().isoformat()} for p in pedidos]
-
-        with open(archivo, 'w', encoding='utf-8') as f: json.dump(datos, f, indent=2, ensure_ascii=False
-
+        datos = [{"marca": p,marca, "cantidad": p.cantidad, "precio": p.precio, "tipo": p.tipo, "total": p.calcular_total()} for p in pedidos]
+        with open(archivo, 'w', encoding='utf-8') as f:
+            json.dump(datos, f, indent=2, ensure_ascii=False
+                      
 def cargar_backup(archivo:= "backup_pedidos.json") -> List[Prenda]:
     """Carga pedidos desde archivo JSON"""
-        if not os.path.exists(archivo): return[]
+        if not os.path.exists(archivo): 
+            return[]
+try
         with open(archivo, 'r', encoding='utf-8') as f:
            return [PrendaMayorista(d["marca"], d["cantidad"], d["precio"], d["tipo"]) for d in json.load(f)]
+        exept Exception:
+          return[]
 
 def exportar_reporte(pedidos: List[Prenda], archivo: = "reporte_pedidos.txt"):
     """Exporta reporte a archivo de texto"""
         with open(archivo, 'w', encoding='utf-8') as f:
             f.write("="*60 + "\nREPORTE DE PEDIDOS\n" + "="*60 + "\n\n")
             for i, p in enumerate(pedidos, 1):
-                f.write(f"Pedido #{i}\n" Marca: {p.marca}\n Cantidad: {p.cantidad}\n Precio: Q{p.precio:.2f}\n Tipo: {p.tipo}\n Total: Q{p.calcular_total():.2f}\n" + "-"*40 + "\n")
+                f.write(f"Pedido #{i}\n  Marca: {p.marca}\n  Cantidad: {p.cantidad}\n  Precio: Q{p.precio:.2f}\n  Tipo: {p.tipo}\n  Total: Q{p.calcular_total():.2f}\n" + "-"*40 + "\n")
             f.write(f"\nTOTAL GENERAL: Q{sum(p.calcular_total() for p in pedidos):.2f}\n")
         return True
 
@@ -286,7 +322,6 @@ def menu_empleado(db: BaseDatos, pedidos_actuales: List[Prenda], pila: Pila, col
                     print(f" Encontrada en #{idx}: {pedidos_actuales[idx]}" if idx) >= 0 else "No Encontrada")
             
             elif op == "4": print(f"\n TOTAL RECURSIVO:
-                print(f"\n TOTAL RECURSIVO: 
                 {Utilidades.formatear_moneda(calcular_total_recursivo(pedidos_actuales))}")    
                 
             elif op == "5":
@@ -302,8 +337,7 @@ def menu_admin(db: BaseDatos):
     """Menú para administrador"""
     while True:
         limpiar_pantalla()
-        print("\n" + "="*50 + "\n SISTEMA DE PEDIDOS - ADMIN\n" + "="*50 + "\n1. ver pedidos
-        BD\n2. Editar pedido\n3. Eliminar pedido\n4. Exportar reporte\n5. Salir\n" + "="*50)
+        print("\n" + "="*50 + "\n SISTEMA DE PEDIDOS - ADMIN\n" + "="*50 + "\n1. ver pedidosBD\n2. Editar pedido\n3. Eliminar pedido\n4. Exportar reporte\n5. Salir\n" + "="*50)
         op = input("\n Seleccione una opción: ")
         
         try:
@@ -314,14 +348,14 @@ def menu_admin(db: BaseDatos):
                     print("\n" + "="*90 + f"\n{'ID':<5} {'Marca':<15} {'Cantidad':<10} {'Precio':<12} {'Tipo':<15} {'Total':<12}\n" + "="*90)
                     for p in p_bd: print(f"{p['id']:<5} {p['marca']:<15} {p['cantidad']:<10} Q{p['precio']:<11.2f} {p['tipo']:<15} Q{p['total']:<11.2f")
             
-            elif op == "2": and p_bd:
-            id_e = Utilidades.validar_tipo(input("\nID a editar: "), int, "ID invalido")
-            p_act= next((x for x in p_bd if x["id"] == id_e), None)
-            if p_act:
+        elif op == "2" and p_bd:
+                id_e = Utilidades.validar_tipo(input("\nID a editar: "), int, "ID inválido")
+                p_act = next((x for x in p_bd if x['id'] == id_e), None)
+                if p_act:
                 
-                m = input(f"Marca ({p_act['marca']}): ") or p_a_act['marca']
+                m = input(f"Marca ({p_act['marca']}): ") or p_act['marca']
                 c = input(f"Cantidad ({p_act['cantidad']}): ")
-                c = Utilidades.validar_entero(nueva_cantidad) if nueva_cantidad else pedido_a_editar['cantidad']
+                c =  Utilidades.validar_tipo(c, int, "Inválido") if c else p_act['cantidad']
                 pr = input(f"precio ({p_act['precio']}): ")
                 pr = Utilidades.validar_tipo(pr, float, "invalido") if pr else p_act['precio']
                 t = input(f"Tipo ({p_act['tipo']}): ") or p_act['tipo']
@@ -370,47 +404,23 @@ def menu_admin(db: BaseDatos):
 # ==================== PROGRAMA PRINCIPAL ====================
 
 def main():
-    """Punto de entrada del programa"""
     db = BaseDatos()
-            usar_bd = db.conectar()
+    usar_bd = db.conectar()
     pedidos_actuales = cargar_backup()
     pila_deshacer, cola_pendientes = Pila(), Cola()
 
     while True:
-    limpiar_pantalla()
-        print("\n" + "-"*60 + f"\n SISTEMA DE PEDIDOS - ROPA\n Cargados {len(pedidos_actuales)} del backup\n " + "="*60)
-        print(" INICIO DE SESIÓN")
-        print("-"*40)
-        usuario = input("Usuario: ")
-        password = input("Contraseña: ")
-        
-        if usar_bd:
-            user_obj = db.autenticar(usuario, password)
-        else:
-            # Modo local sin BD
-            if usuario == "admin" and password == "admin123":
-                user_obj = Usuario("admin", "admin")
-            elif usuario == "empleado" and password == "emp456":
-                user_obj = Usuario("empleado", "empleado")
-            else:
-                user_obj = None
-        
-        if user_obj:
-            print(f"\n Bienvenido {user_obj.get_nombre()} (Rol: {user_obj.get_rol()})")
-            pausar()
-            
-            if user_obj.get_rol() == "admin":
-                menu_admin(db if usar_bd else None)
-            else:
-                menu_empleado(db if usar_bd else None, pedidos_actuales, pila_deshacer, cola_pendientes)
-            break
-        else:
-            print(" Usuario o contraseña incorrectos")
-            pausar()
-    
-    db.cerrar()
-    print("\n ¡Gracias por usar el sistema!")
+        limpiar_pantalla()
+        print("\n" + "="*60 + f"\n    SISTEMA DE PEDIDOS - ROPA\n    Cargados {len(pedidos_actuales)} del backup\n" + "="*60)
+        u, p = input("Usuario: "), input("Contraseña: ")
+        user_obj = db.autenticar(u, p) if usar_bd else (Usuario("admin", "admin") if u == "admin" and p == "admin123" else None)
 
+        if user_obj:
+            if user_obj.roleme == "admin" or user_obj.rol == "admin": menu_admin(db if usar_bd else None)
+            else: menu_empleado(db if usar_bd else None, pedidos_actuales, pila_deshacer, cola_pendientes)
+            break
+        print(" Login incorrecto"); pausar()
+    if usar_bd: db.cerrar()
 
 if __name__ == "__main__":
     main()
