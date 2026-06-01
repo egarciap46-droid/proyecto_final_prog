@@ -179,4 +179,4 @@ class PrendaOferta(Prenda):
         return total * (1 - self._oferta)
     
     def __str__(self) -> str:
-        return f"{super().__str__()} (🔥 OFERTA {self._oferta*100:.0f}%)"
+        return f"{super().__str__()} ( OFERTA {self._oferta*100:.0f}%)"
