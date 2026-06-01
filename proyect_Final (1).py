@@ -248,88 +248,43 @@ def exportar_reporte(pedidos: List[Prenda], archivo: = "reporte_pedidos.txt"):
 
 
 # ==================== INTERFAZ DE USUARIO ====================
-
-def limpiar_pantalla():
-    os.system('cls' if os.name == 'nt' else 'clear')
-
-
-def pausar():
-    input("\nPresione ENTER para continuar...")
-
+def limpiar_pantalla():os.system('cls' if os.name == 'nt' else 'clear')
+def pausar(): input("\nPresione ENTER para continuar...")
 
 def mostrar_tabla(pedidos: List[Prenda]):
     """Muestra una tabla con los pedidos"""
-    if not pedidos:
-        print("\n No hay pedidos registrados")
-        return
+    if not pedidos: return print("\n No hay pedidos registrados")
     
-    print("\n" + "="*75)
-    print(f"{'#':<4} {'Marca':<15} {'Cantidad':<10} {'Precio':<12} {'Tipo':<15} {'Total':<12}")
-    print("-"*75)
-    
-    total_general = 0
+    print("\n" + "="*75 + f"\n{'#':<4} {'Marca':<15} {'Cantidad':<10} {'Precio':<12} {'Tipo':<15} {'Total':<12}\n" + "-"*75)
     for i, p in enumerate(pedidos):
-        total = p.calcular_total()
-        total_general += total
-        print(f"{i:<4} {p.get_marca():<15} {p.get_cantidad():<10} ${p.get_precio():<11.2f} {p.get_tipo():<15} ${total:<11.2f}")
-    
-    print("="*75)
-    print(f" TOTAL GENERAL: ${total_general:.2f}")
+        print(f"{i:<4} {p.marca:<15} {p.cantidad:<10} Q{p.precio:<11.2f} {p.tipo:<15} Q{p.calcular_total():<11.2f}")    
+    print("="*75 + f"\n TOTAL GENERAL: Q{sum(p,calcular_total() for in pedidos):.2f}")
 
 
 def menu_empleado(db: BaseDatos, pedidos_actuales: List[Prenda], pila: Pila, cola: Cola):
     """Menú para empleados"""
     while True:
         limpiar_pantalla()
-        print("\n" + "="*50)
-        print("    SISTEMA DE PEDIDOS - EMPLEADO")
-        print("="*50)
-        print("1. Agregar nueva prenda")
-        print("2. Ver pedido actual (tabla)")
-        print("3. Buscar prenda (recursivo)")
-        print("4. Calcular total (recursivo)")
-        print("5. Ordenar pedidos por precio")
-        print("6. Guardar y salir")
-        print("="*50)
-        
-        opcion = input("\n Seleccione una opción: ")
-        
+        print("\n" + "="*50 + "\nSISTEMA DE PEDIDOS - EMPLEADO\n" + "="*50 + "\n1. Agregar nueva prenda\n2. Ver pedido actual\n3. Buscar prenda\n4. Calcular total\n5. ordenar por precio\n6. Guardar y salir\n" + "="*50)
+         op = input("\n Seleccione una opción: ")
         try:
-            if opcion == "1":
-                print("\n--- NUEVA PRENDA ---")
-                marca = Utilidades.validar_texto(input("Marca: "))
-                cantidad = Utilidades.validar_entero(input("Cantidad: "))
-                precio = Utilidades.validar_flotante(input("Precio unitario: "))
-                tipo = Utilidades.validar_texto(input("Tipo (remera/pantalón/etc): "))
-                
-                prenda = PrendaMayorista(marca, cantidad, precio, tipo)
+            if op == "1":
+                m = Utilidades.validar_texto(input("Marca: "))
+                c = Utilidades.validar_tipo(input("Cantidad: "),int, "cantidad invalida")
+                p = Utilidades.validar_tipo(input("Precio: ");float; "precio invalido"
+                t = Utilidades.validar_texto(input("Tipo:"))          
+                prenda = PrendaMayorista(m, c, p, t)
                 pedidos_actuales.append(prenda)
-                pila.push(prenda)  # Apilar para posible deshacer
-                cola.encolar(prenda)  # Encolar para procesamiento
-                db.insertar_pedido(prenda)
-                
-                print(f"\n Prenda agregada: {prenda}")
-                print(f" Total: {Utilidades.formatear_moneda(prenda.calcular_total())}")
-                pausar()
+                pila.push(prenda); cola.encolar(prenda)  # Encolar para procesamiento
+                if db: db.insertar_pedido(prenda)
+                print(f"\n agregada: {prenda}")
             
-            elif opcion == "2":
-                mostrar_tabla(pedidos_actuales)
-                pausar()
-            
-            elif opcion == "3":
-                marca = input("\n Marca a buscar: ")
-                indice = buscar_recursivo(pedidos_actuales, 0, marca)
-                if indice >= 0:
-                    print(f" Prenda encontrada en posición #{indice}")
-                    print(f"   {pedidos_actuales[indice]}")
-                else:
-                    print(" Prenda no encontrada")
-                pausar()
-            
-            elif opcion == "4":
-                total = calcular_total_recursivo(pedidos_actuales)
-                print(f"\n TOTAL RECURSIVO: {Utilidades.formatear_moneda(total)}")
-                pausar()
+            elif op == "2": mostrar_tabla(pedidos_actuales)
+            elif op == "3":
+                idx = buscar_recursivo(pedidos_actuales, 0, input("\n Marca a buscar:"))
+                    print(f" Encontrada en #{idx}: {pedidos_actuales[idx]}" if idx) >= 0 else "No Encontrada")
+            elif op == "4": print(f"\n TOTAL RECURSIVO:
+                print(f"\n TOTAL RECURSIVO: {Utilidades.formatear_moneda(total)}")        
             
             elif opcion == "5":
                 if pedidos_actuales:
