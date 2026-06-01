@@ -184,65 +184,43 @@ class BaseDatos:
     # CREATE
     def insertar_pedido(self, p: Prenda)
         try:
-            self.cursor.execute("INSERT INTO pedidos (marca, cantidad, precio, tipo, total, fecha)
-                VALUES (?, ?, ?, ?, ?, ?)',
-                
-            ''', (prenda.get_marca(), prenda.get_cantidad(), prenda.get_precio(),
-                  prenda.get_tipo(), prenda.calcular_total(), datetime.now().isoformat()))
+            self.cursor.execute("INSERT INTO pedidos (marca, cantidad, precio, tipo, total, fecha) VALUES (?, ?, ?, ?, ?, ?)',
+                (p.marca, p.cantidad, p.precio, p.tipo, p.calcular_total(),
+    datetime.now().isoformat()))
             self.conn.commit()
-            return True
-        except Exception as e:
-            print(f"Error insertando: {e}")
-            return False
+            except exception as e: print(f"Error insertado: {e}")
     
     # READ
-    def obtener_pedidos(self) -> List[Dict]:
+    def obtener_pedidos(self)
         try:
             self.cursor.execute("SELECT * FROM pedidos ORDER BY fecha DESC")
-            resultados = self.cursor.fetchall()
-            return [{"id": r[0], "marca": r[1], "cantidad": r[2], "precio": r[3], "tipo": r[4], "total": r[5], "fecha": r[6]} for r in resultados]
-        except Exception as e:
-            print(f"Error obteniendo: {e}")
-            return []
+            return [{"id": r[0], "marca": r[1], "cantidad": r[2], "precio": r[3], "tipo": r[4], "total": r[5], "fecha": r[6]} for r in self.cursor.fetchall()]
+        except Exception as e: return print(f"Error obteniendo: {e}") or []
     
     # UPDATE
-    def actualizar_pedido(self, id_pedido: int, marca: str, cantidad: int, precio: float, tipo: str) -> bool:
-        try:
-            total = cantidad * precio
-            self.cursor.execute('''
-                UPDATE pedidos SET marca=?, cantidad=?, precio=?, tipo=?, total=?
-                WHERE id=?
-            ''', (marca, cantidad, precio, tipo, total, id_pedido))
+    def actualizar_pedido(self, id_p: int, m: str, c: int, pr: float, t: str):
+        try
+            self.cursor.execute(UPDATE pedidos SET marca=?, cantidad=?, precio=?, tipo=?, total=? WHERE id=?', (m, c, pr, t, c*pr, id_p))
             self.conn.commit()
             return True
-        except Exception as e:
-            print(f"Error actualizando: {e}")
+        except Exception as e: return print(f"Error actualizando: {e}") or False
             return False
     
     # DELETE
-    def eliminar_pedido(self, id_pedido: int) -> bool:
+    def eliminar_pedido(self, id_p: int):
         try:
-            self.cursor.execute("DELETE FROM pedidos WHERE id=?", (id_pedido,))
+            self.cursor.execute("DELETE FROM pedidos WHERE id=?", (id_p,))
             self.conn.commit()
             return True
-        except Exception as e:
-            print(f"Error eliminando: {e}")
-            return False
+        except Exception as e: return print(f"Error eliminando: {e}") or False
     
-    def autenticar(self, nombre: str, password: str) -> Optional[Usuario]:
-        try:
-            self.cursor.execute("SELECT nombre, rol FROM usuarios WHERE nombre=? AND password=?", (nombre, password))
-            resultado = self.cursor.fetchone()
-            if resultado:
-                return Usuario(resultado[0], resultado[1])
-            return None
-        except Exception as e:
-            print(f"Error autenticando: {e}")
-            return None
+    def autenticar(self, n: str, p: str):
+            self.cursor.execute("SELECT nombre, rol FROM usuarios WHERE nombre=? AND password=?", (n, p))
+            res = self.cursor.fetchone()
+                return Usuario(res[0], res[1]) ir res else None
     
     def cerrar(self):
-        if self.conn:
-            self.conn.close()
+        if hasattr(self.'conn') and self.conn: self.conn.close()
 
 
 # ==================== MANEJO DE ARCHIVOS ====================
