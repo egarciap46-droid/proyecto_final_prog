@@ -227,52 +227,24 @@ class BaseDatos:
 
 def guardar_backup(pedidos: List[Prenda], archivo= "backup_pedidos.json"):
     """Guarda los pedidos en un archivo JSON"""
-        datos = [{"marca": p,marca, "cantidad": p.cantidad, "precio": p.precio, "tipo": p.tipo, "total": p.calcular_total(), "fecha": datetime.now().isoformat()}por p in pedidos]
+        datos = [{"marca": p,marca, "cantidad": p.cantidad, "precio": p.precio, "tipo": p.tipo, "total": p.calcular_total(), "fecha": datetime.now().isoformat()} for p in pedidos]
 
         with open(archivo, 'w', encoding='utf-8') as f: json.dump(datos, f, indent=2, ensure_ascii=False
 
-def cargar_backup(archivo: str = "backup_pedidos.json") -> List[Prenda]:
+def cargar_backup(archivo:= "backup_pedidos.json") -> List[Prenda]:
     """Carga pedidos desde archivo JSON"""
-    try:
-        if not os.path.exists(archivo):
-            return []
+        if not os.path.exists(archivo): return[]
         with open(archivo, 'r', encoding='utf-8') as f:
-            datos = json.load(f)
-        
-        pedidos = []
-        for d in datos:
-            p = PrendaMayorista(d["marca"], d["cantidad"], d["precio"], d["tipo"])
-            pedidos.append(p)
-        return pedidos
-    except Exception as e:
-        print(f"Error cargando backup: {e}")
-        return []
+           return [PrendaMayorista(d["marca"], d["cantidad"], d["precio"], d["tipo"]) for d in json.load(f)]
 
-
-def exportar_reporte(pedidos: List[Prenda], archivo: str = "reporte_pedidos.txt"):
+def exportar_reporte(pedidos: List[Prenda], archivo: = "reporte_pedidos.txt"):
     """Exporta reporte a archivo de texto"""
-    try:
         with open(archivo, 'w', encoding='utf-8') as f:
-            f.write("="*60 + "\n")
-            f.write("REPORTE DE PEDIDOS\n")
-            f.write(f"Fecha: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
-            f.write("="*60 + "\n\n")
-            
+            f.write("="*60 + "\nREPORTE DE PEDIDOS\n" + "="*60 + "\n\n")
             for i, p in enumerate(pedidos, 1):
-                f.write(f"Pedido #{i}\n")
-                f.write(f"  Marca: {p.get_marca()}\n")
-                f.write(f"  Cantidad: {p.get_cantidad()}\n")
-                f.write(f"  Precio unitario: ${p.get_precio():.2f}\n")
-                f.write(f"  Tipo: {p.get_tipo()}\n")
-                f.write(f"  Total: ${p.calcular_total():.2f}\n")
-                f.write("-"*40 + "\n")
-            
-            total = sum(p.calcular_total() for p in pedidos)
-            f.write(f"\nTOTAL GENERAL: ${total:.2f}\n")
+                f.write(f"Pedido #{i}\n" Marca: {p.marca}\n Cantidad: {p.cantidad}\n Precio: Q{p.precio:.2f}\n Tipo: {p.tipo}\n Total: Q{p.calcular_total():.2f}\n" + "-"*40 + "\n")
+            f.write(f"\nTOTAL GENERAL: Q{sum(p.calcular_total() for p in pedidos):.2f}\n")
         return True
-    except Exception as e:
-        print(f"Error exportando: {e}")
-        return False
 
 
 # ==================== INTERFAZ DE USUARIO ====================
