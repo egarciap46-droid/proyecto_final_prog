@@ -280,141 +280,63 @@ def menu_empleado(db: BaseDatos, pedidos_actuales: List[Prenda], pila: Pila, col
                 print(f"\n agregada: {prenda}")
             
             elif op == "2": mostrar_tabla(pedidos_actuales)
+            
             elif op == "3":
                 idx = buscar_recursivo(pedidos_actuales, 0, input("\n Marca a buscar:"))
                     print(f" Encontrada en #{idx}: {pedidos_actuales[idx]}" if idx) >= 0 else "No Encontrada")
+            
             elif op == "4": print(f"\n TOTAL RECURSIVO:
-                print(f"\n TOTAL RECURSIVO: {Utilidades.formatear_moneda(total)}")        
+                print(f"\n TOTAL RECURSIVO: 
+                {Utilidades.formatear_moneda(calcular_total_recursivo(pedidos_actuales))}")    
+                
+            elif op == "5":
+                for pr in ordenar_por_precio(pedidos_actuales):print(f" {pr} - total:
+                {utilidades.fometar_moneda(pr.calcular_total())}")
             
-            elif opcion == "5":
-                if pedidos_actuales:
-                    ordenados = ordenar_por_precio(pedidos_actuales)
-                    print("\n PEDIDOS ORDENADOS POR PRECIO:")
-                    for p in ordenados:
-                        print(f"   {p} - Total: {Utilidades.formatear_moneda(p.calcular_total())}")
-                else:
-                    print(" No hay pedidos para ordenar")
-                pausar()
-            
-            elif opcion == "6":
-                guardar_backup(pedidos_actuales)
-                print(" Saliendo...")
-                break
-            
-            else:
-                print(" Opción inválida")
-                pausar()
-        
-        except ValueError as e:
-            print(f" Error: {e}")
+            elif op == "6": guardar_backup(pedidos_actuales); break  
+            else: print(" Opción inválida")
+        except exeception as e: print(f" Error: {e}")
             pausar()
-        except Exception as e:
-            print(f" Error inesperado: {e}")
-            pausar()
-
 
 def menu_admin(db: BaseDatos):
     """Menú para administrador"""
     while True:
         limpiar_pantalla()
-        print("\n" + "="*50)
-        print("    SISTEMA DE PEDIDOS - ADMINISTRADOR")
-        print("="*50)
-        print("1. Ver todos los pedidos (Base de Datos)")
-        print("2. Editar pedido (UPDATE)")
-        print("3. Eliminar pedido (DELETE)")
-        print("4. Exportar reporte a TXT")
-        print("5. Salir")
-        print("="*50)
-        
-        opcion = input("\n Seleccione una opción: ")
+        print("\n" + "="*50 + "\n SISTEMA DE PEDIDOS - ADMIN\n" + "="*50 + "\n1. ver pedidos
+        BD\n2. Editar pedido\n3. Eliminar pedido\n4. Exportar reporte\n5. Salir\n" + "="*50)
+        op = input("\n Seleccione una opción: ")
         
         try:
-            if opcion == "1":
-                pedidos_bd = db.obtener_pedidos()
-                if not pedidos_bd:
-                    print("\n No hay pedidos en la base de datos")
+                p_bd = db.obtener_pedidos() if db else []
+                if op == "1":
+                if not p_db: print("BD vacia")
                 else:
-                    print("\n" + "="*90)
-                    print(f"{'ID':<5} {'Marca':<15} {'Cantidad':<10} {'Precio':<12} {'Tipo':<15} {'Total':<12} {'Fecha':<20}")
-                    print("-"*90)
-                    for p in pedidos_bd:
-                        print(f"{p['id']:<5} {p['marca']:<15} {p['cantidad']:<10} ${p['precio']:<11.2f} {p['tipo']:<15} ${p['total']:<11.2f} {p['fecha'][:19]}")
-                pausar()
+                    print("\n" + "="*90 + f"\n{'ID':<5} {'Marca':<15} {'Cantidad':<10} {'Precio':<12} {'Tipo':<15} {'Total':<12}\n" + "="*90)
+                    for p in p_bd: print(f"{p['id']:<5} {p['marca']:<15} {p['cantidad']:<10} Q{p['precio']:<11.2f} {p['tipo']:<15} Q{p['total']:<11.2f")
             
-            elif opcion == "2":
-                pedidos_bd = db.obtener_pedidos()
-                if not pedidos_bd:
-                    print("📭 No hay pedidos para editar")
-                    pausar()
-                    continue
+            elif op == "2": and p_bd:
+            id_e = Utilidades.validar_tipo(input("\nID a editar: "), int, "ID invalido")
+            p_act= next((x for x in p_bd if x["id"] == id_e), None)
+            if p_act:
                 
-                mostrar_tabla_simple_bd(pedidos_bd)
-                id_editar = Utilidades.validar_entero(input("\nID del pedido a editar: "))
+                m = input(f"Marca ({p_act['marca']}): ") or p_a_act['marca']
+                c = input(f"Cantidad ({p_act['cantidad']}): ")
+                c = Utilidades.validar_entero(nueva_cantidad) if nueva_cantidad else pedido_a_editar['cantidad']
+                pr = input(f"precio ({p_act['precio']}): ")
+                pr = Utilidades.validar_tipo(pr, float, "invalido") if pr else p_act['precio']
+                t = input(f"Tipo ({p_act['tipo']}): ") or p_act['tipo']
                 
-                # Buscar el pedido
-                pedido_a_editar = None
-                for p in pedidos_bd:
-                    if p['id'] == id_editar:
-                        pedido_a_editar = p
-                        break
+                db.actualizar_pedido(id_e, m, c, p, t): 
+            elif op == "3": and p_bd:
+                id_d = Utilidades.validar_tipo(input("\nID a eliminar: "), int, "ID invalido")
+                if input("confirmar? (s/n): ").lower() == 's':db. eliminar_pedido(id_d)
                 
-                if not pedido_a_editar:
-                    print(" ID no encontrado")
-                    pausar()
-                    continue
-                
-                print(f"\nEditando pedido #{id_editar}")
-                print(f"Datos actuales: {pedido_a_editar['marca']} - {pedido_a_editar['cantidad']} uds")
-                
-                nueva_marca = input(f"Nueva marca ({pedido_a_editar['marca']}): ") or pedido_a_editar['marca']
-                nueva_cantidad = input(f"Nueva cantidad ({pedido_a_editar['cantidad']}): ")
-                nueva_cantidad = Utilidades.validar_entero(nueva_cantidad) if nueva_cantidad else pedido_a_editar['cantidad']
-                nuevo_precio = input(f"Nuevo precio ({pedido_a_editar['precio']}): ")
-                nuevo_precio = Utilidades.validar_flotante(nuevo_precio) if nuevo_precio else pedido_a_editar['precio']
-                nuevo_tipo = input(f"Nuevo tipo ({pedido_a_editar['tipo']}): ") or pedido_a_editar['tipo']
-                
-                if db.actualizar_pedido(id_editar, nueva_marca, nueva_cantidad, nuevo_precio, nuevo_tipo):
-                    print(" Pedido actualizado correctamente")
-                else:
-                    print(" Error al actualizar")
-                pausar()
-            
-            elif opcion == "3":
-                pedidos_bd = db.obtener_pedidos()
-                if not pedidos_bd:
-                    print(" No hay pedidos para eliminar")
-                    pausar()
-                    continue
-                
-                mostrar_tabla_simple_bd(pedidos_bd)
-                id_eliminar = Utilidades.validar_entero(input("\nID del pedido a eliminar: "))
-                
-                confirmar = input(f" ¿Seguro que desea eliminar el pedido #{id_eliminar}? (s/n): ")
-                if confirmar.lower() == 's':
-                    if db.eliminar_pedido(id_eliminar):
-                        print(" Pedido eliminado correctamente")
-                    else:
-                        print(" Error al eliminar")
-                else:
-                    print(" Eliminación cancelada")
-                pausar()
-            
-            elif opcion == "4":
-                pedidos_bd = db.obtener_pedidos()
-                if not pedidos_bd:
-                    print(" No hay pedidos para exportar")
-                else:
-                    # Convertir a objetos Prenda para exportar
-                    prendas_export = []
-                    for p in pedidos_bd:
-                        prenda = PrendaMayorista(p['marca'], p['cantidad'], p['precio'], p['tipo'])
-                        prendas_export.append(prenda)
-                    
-                    if exportar_reporte(prendas_export):
-                        print(" Reporte exportado a 'reporte_pedidos.txt'")
-                    else:
-                        print(" Error al exportar")
+            elif op =="4" and p_bd:
+                exportar_reporte([PrendasMayoristas(x['marca'], x['cantidad'], x['precio'], x['tipo']) for x in p_bd])
+                        print(" generado exitosamente.")
+                        
+            elif op == "5": break
+            except Exception as e: print(f" Error:{e}")
                 pausar()
             
             elif opcion == "5":
@@ -431,16 +353,6 @@ def menu_admin(db: BaseDatos):
         except Exception as e:
             print(f" Error inesperado: {e}")
             pausar()
-
-
-def mostrar_tabla_simple_bd(pedidos):
-    """Muestra tabla simple para la BD"""
-    print("\n" + "="*70)
-    print(f"{'ID':<5} {'Marca':<15} {'Cantidad':<10} {'Precio':<10} {'Tipo':<12} {'Total':<12}")
-    print("-"*70)
-    for p in pedidos:
-        print(f"{p['id']:<5} {p['marca']:<15} {p['cantidad']:<10} ${p['precio']:<9.2f} {p['tipo']:<12} ${p['total']:<11.2f}")
-
 
 # ==================== PRINCIPIO SOLID APLICADOS ====================
 # 1. SRP - Single Responsibility: Cada clase tiene una única responsabilidad
@@ -459,35 +371,14 @@ def mostrar_tabla_simple_bd(pedidos):
 
 def main():
     """Punto de entrada del programa"""
-    print("\n" + "="*60)
-    print("    SISTEMA DE PEDIDOS - ROPA AL POR MAYOR")
-    print("   PROYECTO FINAL - PROGRAMACIÓN I")
-    print("="*60)
-    
-    # Inicializar componentes
     db = BaseDatos()
-    
-    try:
-        if not db.conectar():
-            print(" Error con BD, usando modo local")
-            usar_bd = False
-        else:
-            usar_bd = True
-            print(" Base de datos conectada")
-    except Exception as e:
-        print(f" No se pudo conectar a BD: {e}")
-        usar_bd = False
-    
-    # Cargar datos
+            usar_bd = db.conectar()
     pedidos_actuales = cargar_backup()
-    pila_deshacer = Pila()
-    cola_pendientes = Cola()
-    
-    print(f" Cargados {len(pedidos_actuales)} pedidos del backup")
-    
-    # Login
+    pila_deshacer, cola_pendientes = Pila(), Cola()
+
     while True:
-        print("\n" + "-"*40)
+    limpiar_pantalla()
+        print("\n" + "-"*60 + f"\n SISTEMA DE PEDIDOS - ROPA\n Cargados {len(pedidos_actuales)} del backup\n " + "="*60)
         print(" INICIO DE SESIÓN")
         print("-"*40)
         usuario = input("Usuario: ")
