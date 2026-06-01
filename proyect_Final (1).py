@@ -104,169 +104,62 @@ class Usuario:
 # LISTA ENLAZADA (Unidad 5)
 class Nodo:
     def __init__(self, dato):
-        self.dato = dato
-        self.siguiente = None
+        self.dato, self.siguiente = dato, None
 
 class ListaEnlazada:
     """Implementación de lista enlazada simple"""
     
     def __init__(self):
-        self._cabeza = None
-        self._tamaño = 0
+        self._cabeza, self._tamaño = None, 0
     
     def agregar(self, dato):
         nuevo = Nodo(dato)
-        if not self._cabeza:
-            self._cabeza = nuevo
+        if not self._cabeza: self._cabeza = nuevo
         else:
-            actual = self._cabeza
-            while actual.siguiente:
-                actual = actual.siguiente
-            actual.siguiente = nuevo
+            act = self._cabeza
+            while act.siguiente: act = act.siguiente
+            act.siguiente = nuevo
         self._tamaño += 1
     
-    def eliminar(self, indice: int) -> bool:
-        if indice < 0 or indice >= self._tamaño:
-            return False
-        if indice == 0:
-            self._cabeza = self._cabeza.siguiente
-        else:
-            actual = self._cabeza
-            for _ in range(indice - 1):
-                actual = actual.siguiente
-            actual.siguiente = actual.siguiente.siguiente
-        self._tamaño -= 1
-        return True
-    
-    def obtener(self, indice: int):
-        if indice < 0 or indice >= self._tamaño:
-            return None
-        actual = self._cabeza
-        for _ in range(indice):
-            actual = actual.siguiente
-        return actual.dato
-    
     def obtener_todos(self):
-        resultado = []
-        actual = self._cabeza
-        while actual:
-            resultado.append(actual.dato)
-            actual = actual.siguiente
-        return resultado
-    
-    def tamaño(self): return self._tamaño
-
+         res,act = [], self._cabeza
+        while act: res.append(act.dato);act = act.siguiente
+        return res
+        
 
 # PILA (Stack) - Unidad 6
 class Pila:
     """Implementación de Pila (LIFO) para deshacer acciones"""
     
-    def __init__(self):
-        self._items = []
-    
-    def push(self, item):
-        self._items.append(item)
-    
-    def pop(self):
-        if not self.esta_vacia():
-            return self._items.pop()
-        return None
-    
-    def top(self):
-        if not self.esta_vacia():
-            return self._items[-1]
-        return None
-    
-    def esta_vacia(self):
-        return len(self._items) == 0
-    
-    def tamaño(self):
-        return len(self._items)
-
+    def __init__(self): self._items []    
+    def push(self, item): self._items.append(item)   
+    def pop(self): return self._items.pop() if self._items else None
 
 # COLA (Queue) - Unidad 6
 class Cola:
     """Implementación de Cola (FIFO) para pedidos pendientes"""
     
-    def __init__(self):
-        self._items = []
-    
-    def encolar(self, item):
-        self._items.append(item)
-    
-    def desencolar(self):
-        if not self.esta_vacia():
-            return self._items.pop(0)
-        return None
-    
-    def frente(self):
-        if not self.esta_vacia():
-            return self._items[0]
-        return None
-    
-    def esta_vacia(self):
-        return len(self._items) == 0
-    
-    def tamaño(self):
-        return len(self._items)
+    def __init__(self): self._items = []  
+    def encolar(self, item):self._items.append(item)   
+    def desencolar(self): return self._items.pop(0) if self._items else None
 
 
 # ==================== ALGORITMOS ====================
 
-def busqueda_binaria(lista: List[Prenda], marca_buscar: str) -> int:
-    """
-    ALGORITMO DE BÚSQUEDA BINARIA (Unidad 3)
-    Requiere lista ordenada por marca
-    """
-    izquierda, derecha = 0, len(lista) - 1
-    
-    while izquierda <= derecha:
-        medio = (izquierda + derecha) // 2
-        marca_actual = lista[medio].get_marca().lower()
-        
-        if marca_actual == marca_buscar.lower():
-            return medio
-        elif marca_actual < marca_buscar.lower():
-            izquierda = medio + 1
-        else:
-            derecha = medio - 1
-    return -1
-
-
-def ordenar_por_precio(lista: List[Prenda]) -> List[Prenda]:
-    """
-    ALGORITMO DE ORDENAMIENTO (QuickSort) - Unidad 3
-    Ordena prendas por precio total
-    """
-    if len(lista) <= 1:
-        return lista
-    
+def ordenar_por_precio(lista: List[Prenda] -> list[prenda]:
+    if len(lista) <= 1: return lista
     pivote = lista[0].calcular_total()
     menores = [p for p in lista[1:] if p.calcular_total() <= pivote]
     mayores = [p for p in lista[1:] if p.calcular_total() > pivote]
-    
     return ordenar_por_precio(menores) + [lista[0]] + ordenar_por_precio(mayores)
 
+def calcular_total_recursivo(pedidos: List[Prenda], idx: int = 0) -> float:
+    return 0 if idx >= len(pedidos) else pedidos[idx].calcular_total() +
+calcular_total_recursivo(pedidos, idx + 1)
 
-# FUNCIÓN RECURSIVA (Unidad 2)
-def calcular_total_recursivo(pedidos: List[Prenda], indice: int = 0) -> float:
-    """
-    Calcula el total de todos los pedidos usando RECURSIVIDAD
-    """
-    if indice >= len(pedidos):
-        return 0
-    return pedidos[indice].calcular_total() + calcular_total_recursivo(pedidos, indice + 1)
-
-
-def buscar_recursivo(pedidos: List[Prenda], indice: int, marca: str) -> int:
-    """
-    Búsqueda recursiva de una prenda por marca
-    """
-    if indice >= len(pedidos):
-        return -1
-    if pedidos[indice].get_marca().lower() == marca.lower():
-        return indice
-    return buscar_recursivo(pedidos, indice + 1, marca)
+def buscar_recursivo(pedidos: list[prenda], idx: int, marca: str) -> int:
+    if idx >= len(pedidos): return -1
+    return idx if pedidos[idx].marca.lower() == marca.lower() else buscar_recursivo(pedidos, idx + 1, marca)
 
 
 # ==================== BASE DE DATOS (CRUD) ====================
@@ -274,56 +167,26 @@ def buscar_recursivo(pedidos: List[Prenda], indice: int, marca: str) -> int:
 class BaseDatos:
     """Manejo de base de datos SQLite (no requiere instalación)"""
     
-    def __init__(self):
-        self.conn = None
-        self.cursor = None
-    
     def conectar(self):
         try:
             self.conn = sqlite3.connect('tienda_ropa.db')
             self.cursor = self.conn.cursor()
-            self._crear_tablas()
-            return True
-        except Exception as e:
-            print(f"Error de BD: {e}")
-            return False
-    
-    def _crear_tablas(self):
-        """DDL - Creación de tablas"""
-        # Tabla de usuarios
-        self.cursor.execute('''
-            CREATE TABLE IF NOT EXISTS usuarios (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                nombre TEXT UNIQUE NOT NULL,
-                password TEXT NOT NULL,
-                rol TEXT NOT NULL
-            )
-        ''')
-        
-        # Tabla de pedidos
-        self.cursor.execute('''
-            CREATE TABLE IF NOT EXISTS pedidos (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                marca TEXT NOT NULL,
-                cantidad INTEGER NOT NULL,
-                precio REAL NOT NULL,
-                tipo TEXT NOT NULL,
-                total REAL NOT NULL,
-                fecha TEXT NOT NULL
-            )
-        ''')
+            self.cursor.execute("CREATE TABLE IF NOT EXISTS usuarios (id INTEGER PRIMARY KEY, nombre TEXT UNIQUE, password TEXT, rol TEXT)´)
+            self.cursor.execute("CREATE TABLE IF NOT EXISTS pedidos (id INTEGER PRIMARY KEY, marca TEXT,cantidad INTEGER,precio REAL,tipo TEXT,total REA,fecha TEXT)´)
         
         # Insertar usuarios por defecto
-        self.cursor.execute("INSERT OR IGNORE INTO usuarios (nombre, password, rol) VALUES ('admin', 'admin123', 'admin')")
-        self.cursor.execute("INSERT OR IGNORE INTO usuarios (nombre, password, rol) VALUES ('empleado', 'emp456', 'empleado')")
+        # self.cursor.executemany("INSERT OR IGNORE INTO usuarios (nombre, password, rol) VALUES (?,?,?)",[('admin', 'admin123', 'admin'),('empleado', 'emp456', 'empleado' 
+        self.cursor.execute("INSERT OR IGNORE INTO usuarios (nombre, password, rol) VALUES ('empleado', 'emp456', 'empleado')")]
         self.conn.commit()
-    
+        return True
+        except Exception as e: return print(f"error BD: {e}") or False
+                                
     # CREATE
-    def insertar_pedido(self, prenda: Prenda) -> bool:
+    def insertar_pedido(self, p: Prenda)
         try:
-            self.cursor.execute('''
-                INSERT INTO pedidos (marca, cantidad, precio, tipo, total, fecha)
-                VALUES (?, ?, ?, ?, ?, ?)
+            self.cursor.execute("INSERT INTO pedidos (marca, cantidad, precio, tipo, total, fecha)
+                VALUES (?, ?, ?, ?, ?, ?)',
+                
             ''', (prenda.get_marca(), prenda.get_cantidad(), prenda.get_precio(),
                   prenda.get_tipo(), prenda.calcular_total(), datetime.now().isoformat()))
             self.conn.commit()
