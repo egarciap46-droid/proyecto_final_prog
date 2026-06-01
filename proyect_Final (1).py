@@ -362,10 +362,10 @@ def menu_admin(db: BaseDatos):
                 else:
                     print("\n" + "="*90 + f"\n{'ID':<5} {'Marca':<15} {'Cantidad':<10} {'Precio':<12} {'Tipo':<15} {'Total':<12}\n" + "="*90)
                     for p in p_bd: 
-                        print(f"{p['id']:<5} {p['marca']:<15} {p['cantidad']:<10} Q{p['precio']:<11.2f} {p['tipo']:<15} Q{p['total']:<11.2f")
+                        print(f"{p['id']:<5} {p['marca']:<15} {p['cantidad']:<10} Q{p['precio']:<11.2f} {p['tipo']:<15} Q{p['total']:<11.2f"} )
 
                                                                                                                           
-            elif op == "2":
+            if op == "2":
                 if not p_bd:
                     print("No hay pedidos para editar")
                     pausar()
@@ -379,15 +379,28 @@ def menu_admin(db: BaseDatos):
                     pr_in = input(f"Precio ({p_act['precio']}): ")
                     pr = Utilidades.validar_tipo(pr_in, float, "Inválido") if pr_in else p_act['precio']
                     t = input(f"Tipo ({p_act['tipo']}): ") or p_act['tipo']
-                
-                db.actualizar_pedido(id_e, m, c, p, t): 
-            elif op == "3": and p_bd:
+                    
+               temp_prenda = PrendaMayorista(m, c, pr, t)
+                    db.actualizar_pedido(id_e, m, c, pr, t, temp_prenda.calcular_total())
+                    print(" Pedido modificado correctamente.") and p_bd:
+else:
+      print("ID no encontrado.")
+elif op == "3":
+if not p:bd:
+    print("no hay pedidos para eliminar")
+pausar()
+continue
                 id_d = Utilidades.validar_tipo(input("\nID a eliminar: "), int, "ID invalido")
-                if input("confirmar? (s/n): ").lower() == 's':db. eliminar_pedido(id_d)
+                if input("confirmar eliminacion? (s/n): ").lower() == 's':
+                    db. eliminar_pedido(id_d)
+                    print("pedido eliminado")
                 
-            elif op =="4" and p_bd:
-                exportar_reporte([PrendasMayoristas(x['marca'], x['cantidad'], x['precio'], x['tipo']) for x in p_bd])
-                        print(" generado exitosamente.")
+            elif op =="4"and p_bd:
+                print("No hay datos en la BD para exportar".)
+                else:
+                lista_prendas = [PrendasMayoristas(x['marca'], x['cantidad'], x['precio'], x['tipo']) for x in p_bd]
+                exportar_reporte(lista_prendas)    
+print(" Reporte 'reporte_pedidos.txt'generado exitosamente.")
                         
             elif op == "5": break
             except Exception as e: print(f" Error:{e}")
@@ -395,17 +408,11 @@ def menu_admin(db: BaseDatos):
             
             elif opcion == "5":
                 print(" Saliendo del panel admin...")
-                break
-            
+                break            
             else:
                 print(" Opción inválida")
-                pausar()
-        
-        except ValueError as e:
+except Exception as e:
             print(f" Error: {e}")
-            pausar()
-        except Exception as e:
-            print(f" Error inesperado: {e}")
             pausar()
 
 # ==================== PRINCIPIO SOLID APLICADOS ====================
