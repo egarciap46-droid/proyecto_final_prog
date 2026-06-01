@@ -284,24 +284,28 @@ def exportar_reporte(pedidos: List[Prenda], archivo: = "reporte_pedidos.txt"):
 
 
 # ==================== INTERFAZ DE USUARIO ====================
-def limpiar_pantalla():os.system('cls' if os.name == 'nt' else 'clear')
-def pausar(): input("\nPresione ENTER para continuar...")
+def limpiar_pantalla()
+:os.system('cls' if os.name == 'nt' else 'clear')
+    
+def pausar():
+    input("\nPresione ENTER para continuar...")
 
 def mostrar_tabla(pedidos: List[Prenda]):
     """Muestra una tabla con los pedidos"""
-    if not pedidos: return print("\n No hay pedidos registrados")
+    if not pedidos: 
+        return print("\n No hay pedidos registrados")
     
     print("\n" + "="*75 + f"\n{'#':<4} {'Marca':<15} {'Cantidad':<10} {'Precio':<12} {'Tipo':<15} {'Total':<12}\n" + "-"*75)
     for i, p in enumerate(pedidos):
         print(f"{i:<4} {p.marca:<15} {p.cantidad:<10} Q{p.precio:<11.2f} {p.tipo:<15} Q{p.calcular_total():<11.2f}")    
-    print("="*75 + f"\n TOTAL GENERAL: Q{sum(p,calcular_total() for in pedidos):.2f}")
+    print("="*75 + f"\n TOTAL GENERAL:  {Utilidades.formatear_moneda(sum(p.calcular_total() for p in pedidos))}")
 
 
 def menu_empleado(db: BaseDatos, pedidos_actuales: List[Prenda], pila: Pila, cola: Cola):
     """Menú para empleados"""
     while True:
         limpiar_pantalla()
-        print("\n" + "="*50 + "\nSISTEMA DE PEDIDOS - EMPLEADO\n" + "="*50 + "\n1. Agregar nueva prenda\n2. Ver pedido actual\n3. Buscar prenda\n4. Calcular total\n5. ordenar por precio\n6. Guardar y salir\n" + "="*50)
+        print("\n" + "="*50 + "\nSISTEMA DE PEDIDOS - EMPLEADO\n" + "="*50 + "\n1. Agregar nueva prenda\n2. Ver pedido actual\n3. Buscar prenda\n4. Calcular total recursivo\n5. ordenar por precio\n6. Guardar y salir\n" + "="*50)
          op = input("\n Seleccione una opción: ")
         try:
             if op == "1":
@@ -311,26 +315,36 @@ def menu_empleado(db: BaseDatos, pedidos_actuales: List[Prenda], pila: Pila, col
                 t = Utilidades.validar_texto(input("Tipo:"))          
                 prenda = PrendaMayorista(m, c, p, t)
                 pedidos_actuales.append(prenda)
-                pila.push(prenda); cola.encolar(prenda)  # Encolar para procesamiento
-                if db: db.insertar_pedido(prenda)
-                print(f"\n agregada: {prenda}")
+                pila.push(prenda)
+                cola.encolar(prenda)  # Encolar para procesamiento
+                if db: 
+                    db.insertar_pedido(prenda)
+                print(f"\n agregada con exito: {prenda}")
             
-            elif op == "2": mostrar_tabla(pedidos_actuales)
+            elif op == "2":
+                mostrar_tabla(pedidos_actuales)
             
             elif op == "3":
-                idx = buscar_recursivo(pedidos_actuales, 0, input("\n Marca a buscar:"))
-                    print(f" Encontrada en #{idx}: {pedidos_actuales[idx]}" if idx) >= 0 else "No Encontrada")
+                 m_buscar = input("\n Marca a buscar: ")
+                idx = buscar_recursivo(pedidos_actuales, 0, m_buscar)
+                    print(f" Encontrada en el indice #{idx}: {pedidos_actuales[idx]}" if idx) >= 0 else "No Encontrada")
             
-            elif op == "4": print(f"\n TOTAL RECURSIVO:
-                {Utilidades.formatear_moneda(calcular_total_recursivo(pedidos_actuales))}")    
+            elif op == "4": 
+                tot = calcular_total_recursivo(pedidos_actuales)
+                print(f"\n TOTAL RECURSIVO: {Utilidades.formatear_moneda(tot)}")    
                 
             elif op == "5":
-                for pr in ordenar_por_precio(pedidos_actuales):print(f" {pr} - total:
-                {utilidades.fometar_moneda(pr.calcular_total())}")
+                ordenados = ordenar_por_precio(pedidos_actuales):
+                 for pr in ordenados:
+                print(f" {pr} - total: {utilidades.fometar_moneda(pr.calcular_total())}")
             
-            elif op == "6": guardar_backup(pedidos_actuales); break  
-            else: print(" Opción inválida")
-        except exeception as e: print(f" Error: {e}")
+            elif op == "6": 
+                guardar_backup(pedidos_actuales)
+                break  
+            else:
+                print(" Opción inválida")
+        except exeception as e:
+                print(f" Error: {e}")
             pausar()
 
 def menu_admin(db: BaseDatos):
@@ -343,22 +357,28 @@ def menu_admin(db: BaseDatos):
         try:
                 p_bd = db.obtener_pedidos() if db else []
                 if op == "1":
-                if not p_db: print("BD vacia")
+                if not p_db:
+                    print("BD vacia")
                 else:
                     print("\n" + "="*90 + f"\n{'ID':<5} {'Marca':<15} {'Cantidad':<10} {'Precio':<12} {'Tipo':<15} {'Total':<12}\n" + "="*90)
-                    for p in p_bd: print(f"{p['id']:<5} {p['marca']:<15} {p['cantidad']:<10} Q{p['precio']:<11.2f} {p['tipo']:<15} Q{p['total']:<11.2f")
-            
-        elif op == "2" and p_bd:
+                    for p in p_bd: 
+                        print(f"{p['id']:<5} {p['marca']:<15} {p['cantidad']:<10} Q{p['precio']:<11.2f} {p['tipo']:<15} Q{p['total']:<11.2f")
+
+                                                                                                                          
+            elif op == "2":
+                if not p_bd:
+                    print("No hay pedidos para editar")
+                    pausar()
+                    continue
                 id_e = Utilidades.validar_tipo(input("\nID a editar: "), int, "ID inválido")
                 p_act = next((x for x in p_bd if x['id'] == id_e), None)
                 if p_act:
-                
-                m = input(f"Marca ({p_act['marca']}): ") or p_act['marca']
-                c = input(f"Cantidad ({p_act['cantidad']}): ")
-                c =  Utilidades.validar_tipo(c, int, "Inválido") if c else p_act['cantidad']
-                pr = input(f"precio ({p_act['precio']}): ")
-                pr = Utilidades.validar_tipo(pr, float, "invalido") if pr else p_act['precio']
-                t = input(f"Tipo ({p_act['tipo']}): ") or p_act['tipo']
+                    m = input(f"Marca ({p_act['marca']}): ") or p_act['marca']
+                    c_in = input(f"Cantidad ({p_act['cantidad']}): ")
+                    c = Utilidades.validar_tipo(c_in, int, "Inválido") if c_in else p_act['cantidad']
+                    pr_in = input(f"Precio ({p_act['precio']}): ")
+                    pr = Utilidades.validar_tipo(pr_in, float, "Inválido") if pr_in else p_act['precio']
+                    t = input(f"Tipo ({p_act['tipo']}): ") or p_act['tipo']
                 
                 db.actualizar_pedido(id_e, m, c, p, t): 
             elif op == "3": and p_bd:
