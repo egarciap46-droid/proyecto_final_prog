@@ -225,26 +225,11 @@ class BaseDatos:
 
 # ==================== MANEJO DE ARCHIVOS ====================
 
-def guardar_backup(pedidos: List[Prenda], archivo: str = "backup_pedidos.json"):
+def guardar_backup(pedidos: List[Prenda], archivo= "backup_pedidos.json"):
     """Guarda los pedidos en un archivo JSON"""
-    try:
-        datos = []
-        for p in pedidos:
-            datos.append({
-                "marca": p.get_marca(),
-                "cantidad": p.get_cantidad(),
-                "precio": p.get_precio(),
-                "tipo": p.get_tipo(),
-                "total": p.calcular_total(),
-                "fecha": datetime.now().isoformat()
-            })
-        with open(archivo, 'w', encoding='utf-8') as f:
-            json.dump(datos, f, indent=2, ensure_ascii=False)
-        return True
-    except Exception as e:
-        print(f"Error guardando backup: {e}")
-        return False
+        datos = [{"marca": p,marca, "cantidad": p.cantidad, "precio": p.precio, "tipo": p.tipo, "total": p.calcular_total(), "fecha": datetime.now().isoformat()}por p in pedidos]
 
+        with open(archivo, 'w', encoding='utf-8') as f: json.dump(datos, f, indent=2, ensure_ascii=False
 
 def cargar_backup(archivo: str = "backup_pedidos.json") -> List[Prenda]:
     """Carga pedidos desde archivo JSON"""
@@ -602,7 +587,7 @@ def main():
                 menu_empleado(db if usar_bd else None, pedidos_actuales, pila_deshacer, cola_pendientes)
             break
         else:
-            print("❌ Usuario o contraseña incorrectos")
+            print(" Usuario o contraseña incorrectos")
             pausar()
     
     db.cerrar()
