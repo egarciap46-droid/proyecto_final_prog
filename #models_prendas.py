@@ -1,6 +1,6 @@
 # models/prenda.py
 # CLASES POO - 4 PILARES DE LA PROGRAMACIÓN ORIENTADA A OBJETOS
-# Autor: [Emerson]
+# Autor: Emerson
 # Fecha: Mayo 2026
 
 """
