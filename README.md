@@ -3,8 +3,8 @@
 ## Proyecto Final - Programación I
 
 ### Integrantes
-- **[Emerson]** - POO, Estructuras de Datos, Manejo de Archivos
-- **[Huber]** - Algoritmos, Base de Datos, UI
+- **Emerson** - POO, Estructuras de Datos, Manejo de Archivos
+- **Huber** - Algoritmos, Base de Datos, UI
 
 ### Requisitos Cumplidos
 #__________________________________________________________

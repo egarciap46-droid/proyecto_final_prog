@@ -1,6 +1,6 @@
 # models/prenda.py
 # CLASES POO - 4 PILARES DE LA PROGRAMACIÓN ORIENTADA A OBJETOS
-# Autor: [Emerson]
+# Autor: Emerson
 # Fecha: Mayo 2026
 
 """
@@ -179,4 +179,8 @@ class PrendaOferta(Prenda):
         return total * (1 - self._oferta)
     
     def __str__(self) -> str:
+ main
         return f"{super().__str__()} ( OFERTA {self._oferta*100:.0f}%)"
+
+        return f"{super().__str__()} ( OFERTA {self._oferta*100:.0f}%)"
+ main
