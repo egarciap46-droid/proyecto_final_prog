@@ -76,37 +76,27 @@ class Prenda:
     def precio(self, v): self._precio=v if v > 0 else self._precio
     
     # Método a ser sobrescrito (POLIMORFISMO)
-    def calcular_total(self) -> float:
-        return self._cantidad * self._precio
+    def calcular_total(self) -> float: return self._cantidad * self._precio
     
-    def __str__(self):
-        return f"{self._tipo} {self._marca} | {self._cantidad} uds | ${self._precio}/ud"
-
+    def __str__(self): return f"{self._tipo} {self._marca} | {self._cantidad} uds | Q{self._precio}/ud"
 
 # HERENCIA - Clase que hereda de Prenda
 class PrendaMayorista(Prenda):
     """Las prendas al por mayor tienen descuento por volumen"""
     
-    def __init__(self, marca: str, cantidad: int, precio: float, tipo: str):
-        super().__init__(marca, cantidad, precio, tipo)
-        self._descuento = 0.10  # 10% de descuento
-    
     # POLIMORFISMO - Sobrescribe el método
     def calcular_total(self) -> float:
-        total = self._cantidad * self._precio
-        if self._cantidad >= 100:
-            total *= (1 - self._descuento)
-        return total
-
-
+        total = super().calcular_total()
+        return total * 0.90 if self._cantidad >= 100 else total
+        
 # Clase Usuario (ENCAPSULAMIENTO)
 class Usuario:
     def __init__(self, nombre: str, rol: str):
-        self._nombre = nombre
-        self._rol = rol  # 'admin' o 'empleado'
-    
-    def get_nombre(self): return self._nombre
-    def get_rol(self): return self._rol
+        self._nombre, self._rol = nombre, rol  # 'admin' o 'empleado'
+    @property
+    def nombre(self): return self._nombre
+    @property    
+    def rol(self): return self._rol
 
 
 # ==================== ESTRUCTURAS DE DATOS ====================
