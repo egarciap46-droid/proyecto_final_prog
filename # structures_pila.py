@@ -1,6 +1,5 @@
 # structures_pila.py
 # ESTRUCTURA DE DATOS: PILA- Unidad 6
-# Autor: Emer
 # Fecha: Mayo 2026
 
 """

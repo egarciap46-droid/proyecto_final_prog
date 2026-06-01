@@ -1,6 +1,5 @@
 # structuras_lista_enlazada.py
 # ESTRUCTURA DE DATOS: LISTA ENLAZADA (Unidad 5)
-# Autor: [Tu Nombre]
 # Fecha: Mayo 2026
 
 """
